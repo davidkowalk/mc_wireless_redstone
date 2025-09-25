@@ -1,0 +1,10 @@
+
+\usepackage[backend=biber,sorting=none,doi=false,isbn=false,url=false,eprint=false, backref=true]{biblatex}
+
+
+\DeclareFieldFormat[online]{title}{\ifhyperref
+  {\href{\thefield{url}}{\emph{\thefield{title}}}}
+  {\emph{\thefield{title}}} 
+}
+
+\DeclareFieldFormat[online]{url}{}
