@@ -65,3 +65,22 @@ function generate_set(delay, tile_length) {
     backtrack(delay, tile_length);
     return results;
 }
+
+function get_available_channels(tile_length) {
+    delay = 2 * tile_length;
+
+    delays = [];
+    available_channels = [];
+
+
+    do {
+        n = generate_set(delay, tile_length).length;
+        delays.push(delay);
+        available_channels.push(n);
+        delay += 2
+    } while (n > 0)
+
+    console.log(delays.toString());
+    console.log(available_channels.toString());
+
+}
