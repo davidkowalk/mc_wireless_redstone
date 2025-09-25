@@ -1,29 +1,38 @@
-class Repeater {
+class Diode {
     constructor(delay, into = null) {
+        this.delay = delay;
+        this.child = into;
+    }
+
+    get_tileset_delay() {
+        if (this.child == null) {
+            return this.delay;
+        } else {
+            return this.delay + this.child.get_tileset_delay();
+        }
+    }
+}
+
+class Repeater extends Diode {
+    constructor(delay, into = null) {
+        super(delay, into);
         this.type = "repeater";
-        this.delay = delay; // delay in game ticks
-        this.child = into;
     }
 
 }
 
-class Comparator {
+class Comparator extends Diode {
     constructor(into = null) {
+        super(2, into);
         this.type = "comparator";
-        this.child = into;
-        this.delay = 2;
     }
 }
 
-function get_ordering(tile_sets) {
+function sort_tilesets(tile_sets) {
+    //takes a list of tile sets and simulates the activation
     return;
 }
 
-/*
-function generate_set(delay, tile_length) {
-    //generates a tile set of set length which 
-}
-    */
 
 function generate_set(delay, tile_length) {
     const results = [];
@@ -45,7 +54,7 @@ function generate_set(delay, tile_length) {
         }
 
         // Try placing a repeater (1–4 ticks)
-        for (let d = 1; d <= 4; d++) {
+        for (let d = 2; d <= 8; d += 2) {
             if (remainingDelay >= d) {
                 const rep = new Repeater(d, chain);
                 backtrack(remainingDelay - d, remainingTiles - 1, rep);
