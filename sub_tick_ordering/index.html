@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sub Tick Ordering</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
+
+    <script src="unit_tests.js"></script>
+    <script src="order.js"></script>
+    <script src="interface.js"></script>
+
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="left">
+        <!--button class="toggle-btn" id="collapseSidebar">✖</button-->
+        <label class="toggle-btn" id="collapseSidebar">x</label>
+        <h2>Sidebar</h2>
+        <p>Some sidebar content...</p>
+    </div>
+
+    <div class="right">
+        <label class="show-sidebar-btn" id="showSidebar">☰</label>
+    </div>
+
+
+
+    <script>
+        document.querySelectorAll('.collapsible-label').forEach(label => {
+            label.addEventListener('click', () => {
+                const content = label.nextElementSibling;
+                content.classList.toggle('open');
+            });
+        });
+    </script>
+    <script src="ui.js"></script>
+
+
+
+</body>
+
+</html>
