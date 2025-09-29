@@ -6,10 +6,28 @@ class LoopHandler {
         this.scheduled_1 = []
         this.scheduled_0 = []
 
+
+        // Next cycle queues
+        this.next_scheduled_3 = [];
+        this.next_scheduled_1 = [];
+        this.next_scheduled_0 = [];
+
         //this.currentTick = 0;
 
         if (tilesets) {
             this.add_tilesets(tilesets);
+        }
+    }
+
+    schedule_next(element) {
+        if (element.priority == 0) {
+            this.next_scheduled_0.push(element);
+        } else if (element.priority == -1) {
+            this.next_scheduled_1.push(element);
+        } else if (element.priority == -3) {
+            this.next_scheduled_3.push(element);
+        } else {
+            console.error("INVALID PRIORITY: " + element.priority);
         }
     }
 
@@ -68,6 +86,18 @@ class LoopHandler {
         if (test == false) {
             console.error("Failed to tick all scheduled elements.")
         }
+
+
+
+        // Merge next cycle queues into active ones
+        this.scheduled_3.push(...this.next_scheduled_3);
+        this.scheduled_1.push(...this.next_scheduled_1);
+        this.scheduled_0.push(...this.next_scheduled_0);
+
+        // Clear cycle queue
+        this.next_scheduled_3 = [];
+        this.next_scheduled_1 = [];
+        this.next_scheduled_0 = [];
 
         //this.currentTick = this.currentTick + 1;
         return;
@@ -135,13 +165,13 @@ class Diode {
             let priority = this.child.priority;
 
             if (priority == 0) {
-                loop_handler.scheduled_0.push(this.child);
+                loop_handler.next_scheduled_0.push(this.child);
                 //console.log("Scheduling " + this.child.toString() + " with priority " + 0)
             } else if (priority == -1) {
-                loop_handler.scheduled_1.push(this.child);
+                loop_handler.next_scheduled_1.push(this.child);
                 //console.log("Scheduling " + this.child.toString() + " with priority " + 1)
             } else if (priority == -3) {
-                loop_handler.scheduled_3.push(this.child);
+                loop_handler.next_scheduled_3.push(this.child);
                 //console.log("Scheduling " + this.child.toString() + " with priority " + 3)
             }
         }
@@ -274,8 +304,8 @@ function get_available_channels(tile_length) {
 
 //For debugging
 function simulate() {
-    set = generate_set(8, 3);
-    //set = generate_set(20, 4);
+    //set = generate_set(8, 3);
+    set = generate_set(20, 4);
     loop = new LoopHandler(set)
 
     let tick = 0;
