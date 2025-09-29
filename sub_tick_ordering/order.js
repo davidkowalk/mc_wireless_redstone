@@ -47,7 +47,7 @@ class Diode {
         this.priority = 0;
         this.scheduled_in = 0;
         this.type = "none";
-        this.parent = {};
+        this.parent_diode = false;
     }
 
     tick(loop_handler) {
@@ -67,6 +67,14 @@ class Diode {
             return this.delay;
         } else {
             return this.delay + this.child.get_tileset_delay();
+        }
+    }
+
+    get_chain_start() {
+        if (this.parent_diode) {
+            return this.parent_diode.get_chain_start();
+        } else {
+            return this;
         }
     }
 
@@ -116,7 +124,7 @@ function generate_set(delay, tile_length) {
         copy.scheduled_in = chain.scheduled_in;
         copy.child = clone_chain(chain.child);
         if (copy.child) {
-            copy.child.parent = copy;
+            copy.child.parent_diode = copy;
         }
         return copy;
     }
@@ -136,7 +144,7 @@ function generate_set(delay, tile_length) {
             new_chain = clone_chain(chain)
             const comp = new Comparator(new_chain);
             if (new_chain) {
-                new_chain.parent = comp;
+                new_chain.parent_diode = comp;
             }
             backtrack(remainingDelay - 2, remainingTiles - 1, comp);
         }
@@ -147,7 +155,7 @@ function generate_set(delay, tile_length) {
                 new_chain = clone_chain(chain)
                 const rep = new Repeater(d, new_chain);
                 if (new_chain) {
-                    new_chain.parent = rep;
+                    new_chain.parent_diode = rep;
                 }
                 backtrack(remainingDelay - d, remainingTiles - 1, rep);
             }
