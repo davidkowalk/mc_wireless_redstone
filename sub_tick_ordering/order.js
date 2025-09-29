@@ -139,7 +139,7 @@ class Diode {
     constructor(delay, into = null) {
         this.delay = delay;
         this.child = into;
-        this.priority = -1;
+        this.priority = 0;
         this.scheduled_in = delay;
         this.type = "none";
         this.parent_diode = false;
@@ -155,7 +155,7 @@ class Diode {
             //console.log(`[Tick fire] ${this.type}(${this.delay}) firing at tick=${loop_handler.currentTick}`);
 
             if (!this.child) {
-                console.log("Finished:" + this.get_chain_start().toString());
+                console.log(this.get_chain_start().toString());
                 this.scheduled_in -= 1;
                 return;
             }
@@ -225,6 +225,8 @@ class Comparator extends Diode {
 
         if (this.child instanceof Diode) {
             this.priority = -1;
+        } else {
+            this.priority = 0;
         }
     }
 }
@@ -304,13 +306,13 @@ function get_available_channels(tile_length) {
 
 //For debugging
 function simulate() {
-    //set = generate_set(8, 3);
-    set = generate_set(20, 4);
+    set = generate_set(6, 2);
+    //set = generate_set(20, 4);
     loop = new LoopHandler(set)
 
     let tick = 0;
     while (loop.scheduled_3.length > 0 || loop.scheduled_1.length > 0 || loop.scheduled_0.length > 0) {
-        console.log("Tick = " + tick)
+        //console.log("Tick = " + tick)
         tick++;
         loop.tick()
     }
