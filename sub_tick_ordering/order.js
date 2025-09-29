@@ -64,8 +64,43 @@ class LoopHandler {
             }
         }
 
+        let test = this.get_ticked();
+        if (test == false) {
+            console.error("Failed to tick all scheduled elements.")
+        }
+
         //this.currentTick = this.currentTick + 1;
         return;
+    }
+
+    get_ticked() {
+        let test = true;
+        //Test if all elements got ticked and resets state
+        this.scheduled_0.forEach((el) => {
+            //console.log(el.ticked);
+            if (el.ticked == false) {
+                test = false
+            };
+            el.ticked = false;
+        })
+
+        this.scheduled_1.forEach((el) => {
+            //console.log(el.ticked);
+            if (el.ticked == false) {
+                test = false
+            };
+            el.ticked = false;
+        })
+
+        this.scheduled_3.forEach((el) => {
+            //console.log(el.ticked);
+            if (el.ticked == false) {
+                test = false
+            };
+            el.ticked = false;
+        })
+
+        return test;
     }
 
 }
@@ -78,11 +113,13 @@ class Diode {
         this.scheduled_in = delay;
         this.type = "none";
         this.parent_diode = false;
+        this.ticked = false;
     }
 
 
 
     tick(loop_handler) {
+        this.ticked = true;
         //console.log("ticked diode");
         if (this.scheduled_in == 0) {
             //console.log(`[Tick fire] ${this.type}(${this.delay}) firing at tick=${loop_handler.currentTick}`);
@@ -237,8 +274,8 @@ function get_available_channels(tile_length) {
 
 //For debugging
 function simulate() {
-    //set = generate_set(8, 3);
-    set = generate_set(20, 4);
+    set = generate_set(8, 3);
+    //set = generate_set(20, 4);
     loop = new LoopHandler(set)
 
     let tick = 0;
