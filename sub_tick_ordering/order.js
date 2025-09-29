@@ -46,6 +46,8 @@ class Diode {
         this.child = into;
         this.priority = 0;
         this.scheduled_in = 0;
+        this.type = "none";
+        this.parent = {};
     }
 
     tick(loop_handler) {
@@ -65,6 +67,14 @@ class Diode {
             return this.delay;
         } else {
             return this.delay + this.child.get_tileset_delay();
+        }
+    }
+
+    toString() {
+        if (this.child) {
+            return this.type + "(" + this.delay + ") -> " + this.child.toString();
+        } else {
+            return this.type + "(" + this.delay + ")";
         }
     }
 }
@@ -97,6 +107,20 @@ class Comparator extends Diode {
 function generate_set(delay, tile_length) {
     const results = [];
 
+
+    function clone_chain(chain) {
+        if (chain == null) return null;
+        const copy = new chain.constructor(chain.delay);
+        copy.type = chain.type;
+        copy.priority = chain.priority;
+        copy.scheduled_in = chain.scheduled_in;
+        copy.child = clone_chain(chain.child);
+        if (copy.child) {
+            copy.child.parent = copy;
+        }
+        return copy;
+    }
+
     function backtrack(remainingDelay, remainingTiles, chain = null) {
         // If we built a valid chain, save it
         if (remainingDelay === 0 && remainingTiles === 0) {
@@ -109,14 +133,22 @@ function generate_set(delay, tile_length) {
 
         // Try placing a comparator
         if (remainingDelay >= 2) {
-            const comp = new Comparator(chain);
+            new_chain = clone_chain(chain)
+            const comp = new Comparator(new_chain);
+            if (new_chain) {
+                new_chain.parent = comp;
+            }
             backtrack(remainingDelay - 2, remainingTiles - 1, comp);
         }
 
         // Try placing a repeater (1–4 ticks)
         for (let d = 2; d <= 8; d += 2) {
             if (remainingDelay >= d) {
-                const rep = new Repeater(d, chain);
+                new_chain = clone_chain(chain)
+                const rep = new Repeater(d, new_chain);
+                if (new_chain) {
+                    new_chain.parent = rep;
+                }
                 backtrack(remainingDelay - d, remainingTiles - 1, rep);
             }
         }
