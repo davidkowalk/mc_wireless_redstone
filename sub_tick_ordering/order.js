@@ -12,6 +12,9 @@ class LoopHandler {
         this.next_scheduled_1 = [];
         this.next_scheduled_0 = [];
 
+        //Store the sorted list
+        this.sorted = [];
+
         //this.currentTick = 0;
 
         if (tilesets) {
@@ -82,7 +85,7 @@ class LoopHandler {
             }
         }
 
-        let test = this.get_ticked();
+        let test = this.got_ticked();
         if (test == false) {
             console.error("Failed to tick all scheduled elements.")
         }
@@ -103,7 +106,7 @@ class LoopHandler {
         return;
     }
 
-    get_ticked() {
+    got_ticked() {
         let test = true;
         //Test if all elements got ticked and resets state
         this.scheduled_0.forEach((el) => {
@@ -133,6 +136,12 @@ class LoopHandler {
         return test;
     }
 
+    sort() {
+        while (this.scheduled_3.length > 0 || this.scheduled_1.length > 0 || this.scheduled_0.length > 0) {
+            this.tick()
+        }
+    }
+
 }
 
 class Diode {
@@ -155,7 +164,7 @@ class Diode {
             //console.log(`[Tick fire] ${this.type}(${this.delay}) firing at tick=${loop_handler.currentTick}`);
 
             if (!this.child) {
-                console.log(this.get_chain_start().toString());
+                loop_handler.sorted.push(this.get_chain_start());
                 this.scheduled_in -= 1;
                 return;
             }
@@ -306,16 +315,12 @@ function get_available_channels(tile_length) {
 
 //For debugging
 function simulate() {
-    set = generate_set(6, 2);
+    set = generate_set(8, 3);
     //set = generate_set(20, 4);
     loop = new LoopHandler(set)
+    loop.sort()
 
-    let tick = 0;
-    while (loop.scheduled_3.length > 0 || loop.scheduled_1.length > 0 || loop.scheduled_0.length > 0) {
-        //console.log("Tick = " + tick)
-        tick++;
-        loop.tick()
-    }
+    console.log(loop.sorted)
 }
 
 function sort_tilesets(tile_sets) {
