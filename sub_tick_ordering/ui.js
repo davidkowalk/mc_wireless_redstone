@@ -8,3 +8,10 @@ collapseBtn.addEventListener("click", () => {
 showBtn.addEventListener("click", () => {
     document.body.classList.remove("collapsed");
 });
+
+function runAndDisplayTests() {
+    document.getElementById("test-results").textContent = "...";
+    const result = run_unit_tests();
+    document.getElementById("test-results").textContent =
+        result.passed + "/" + result.total + " tests passed.";
+}

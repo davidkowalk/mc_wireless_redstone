@@ -29,6 +29,11 @@ function run_unit_tests() {
 
 
     console.info(passed_tests + "/" + total_tests + " tests passed.")
+
+    return {
+        total: total_tests,
+        passed: passed_tests
+    };
 }
 
 function test_generation() {
