@@ -1,41 +1,71 @@
 class LoopHandler {
-    constructor() {
+    constructor(tilesets = null) {
 
         //Priority of Scheduling
         this.scheduled_3 = []
         this.scheduled_1 = []
         this.scheduled_0 = []
+
+        //this.currentTick = 0;
+
+        if (tilesets) {
+            this.add_tilesets(tilesets);
+        }
+    }
+
+    add_tilesets(tilesets) {
+        for (let i = 0; i < tilesets.length; i++) {
+
+            if (tilesets[i].priority == 0) {
+                this.scheduled_0.push(tilesets[i])
+            } else if (tilesets[i].priority == -1) {
+                this.scheduled_1.push(tilesets[i])
+            } else if (tilesets[i].priority == -3) {
+                this.scheduled_3.push(tilesets[i])
+            } else {
+                console.error("INVALID PRIORITY: " + tilesets[i].priority)
+            }
+        }
     }
 
     tick() {
 
+        let i = 0;
         //process in order -3, -1, 0
-        for (let i = 0; i < this.scheduled_3.length; i++) {
+        while (i < this.scheduled_3.length) {
             let element = this.scheduled_3[i];
             if (element.scheduled_in < 0) {
                 this.scheduled_3.splice(i, 1); //Remove from list
             } else {
-                element.tick(this)
+                element.tick(this);
+                i++;
             }
         }
 
-        for (let i = 0; i < this.scheduled_1.length; i++) {
+        i = 0;
+        while (i < this.scheduled_1.length) {
             let element = this.scheduled_1[i];
             if (element.scheduled_in < 0) {
                 this.scheduled_1.splice(i, 1); //Remove from list
             } else {
-                element.tick(this)
+                element.tick(this);
+                i++;
             }
         }
 
-        for (let i = 0; i < this.scheduled_0.length; i++) {
+        i = 0;
+        while (i < this.scheduled_0.length) {
             let element = this.scheduled_0[i];
             if (element.scheduled_in < 0) {
                 this.scheduled_0.splice(i, 1); //Remove from list
             } else {
-                element.tick(this)
+                element.tick(this);
+                i++;
             }
         }
+
+        //this.currentTick = this.currentTick + 1;
+        return;
     }
 
 }
@@ -44,22 +74,42 @@ class Diode {
     constructor(delay, into = null) {
         this.delay = delay;
         this.child = into;
-        this.priority = 0;
-        this.scheduled_in = 0;
+        this.priority = -1;
+        this.scheduled_in = delay;
         this.type = "none";
         this.parent_diode = false;
     }
 
+
+
     tick(loop_handler) {
+        //console.log("ticked diode");
         if (this.scheduled_in == 0) {
+            //console.log(`[Tick fire] ${this.type}(${this.delay}) firing at tick=${loop_handler.currentTick}`);
+
+            if (!this.child) {
+                console.log("Finished:" + this.get_chain_start().toString());
+                this.scheduled_in -= 1;
+                return;
+            }
+
+            this.child.scheduled_in = this.child.delay;
+
             let priority = this.child.priority;
 
             if (priority == 0) {
-                loop_handler.scheduled_0.push(child);
+                loop_handler.scheduled_0.push(this.child);
+                //console.log("Scheduling " + this.child.toString() + " with priority " + 0)
+            } else if (priority == -1) {
+                loop_handler.scheduled_1.push(this.child);
+                //console.log("Scheduling " + this.child.toString() + " with priority " + 1)
+            } else if (priority == -3) {
+                loop_handler.scheduled_3.push(this.child);
+                //console.log("Scheduling " + this.child.toString() + " with priority " + 3)
             }
         }
 
-        scheduled_in -= 1;
+        this.scheduled_in -= 1;
     }
 
     get_tileset_delay() {
@@ -185,6 +235,19 @@ function get_available_channels(tile_length) {
 
 }
 
+//For debugging
+function simulate() {
+    //set = generate_set(8, 3);
+    set = generate_set(20, 4);
+    loop = new LoopHandler(set)
+
+    let tick = 0;
+    while (loop.scheduled_3.length > 0 || loop.scheduled_1.length > 0 || loop.scheduled_0.length > 0) {
+        console.log("Tick = " + tick)
+        tick++;
+        loop.tick()
+    }
+}
 
 function sort_tilesets(tile_sets) {
     //takes a list of tile sets and simulates the activation
