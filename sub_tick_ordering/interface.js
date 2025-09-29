@@ -1,4 +1,3 @@
-
 function generate_set(delay, tile_length) {
     const results = [];
 
@@ -67,8 +66,10 @@ function get_available_channels(tile_length) {
         delay += 2
     } while (n > 0)
 
-    console.log(delays.toString());
-    console.log(available_channels.toString());
+    //console.log(delays.toString());
+    //console.log(available_channels.toString());
+
+    return available_channels;
 
 }
 
