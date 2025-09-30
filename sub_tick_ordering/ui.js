@@ -45,8 +45,27 @@ function getSortedTileset() {
         for (let el of loop.sorted) {
             //console.log(el.toString())
 
-            container.innerHTML += "#" + i + " " + el.toString() + "\n<hr/>";
+            container.innerHTML += get_tileset_html(i, el);
             i++;
         }
     }
+}
+
+function get_tileset_html(i, el) {
+    return "<label><input type='checkbox'>#" + i + " " + el.toString() + "</label>\n<hr/>"
+}
+
+function test_delay_minimum() {
+
+    const delay = parseInt(document.getElementById("delay").value);
+    const tiles = parseInt(document.getElementById("tiles").value);
+
+    const splash_text = document.getElementById("delay_warning_splash");
+
+    if (delay < 2 * tiles) {
+        splash_text.classList.add("show");
+    } else {
+        splash_text.classList.remove("show");
+    }
+
 }

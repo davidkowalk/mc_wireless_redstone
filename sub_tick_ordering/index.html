@@ -14,6 +14,9 @@
 
 
     <link rel="stylesheet" href="./style.css">
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -24,12 +27,16 @@
         <div class="form-row">
             <div>
                 <label for="delay">Delay:</label>
-                <input type="number" class="block_input" id="delay" name="delay" required min=2 max=16 value=2 step=2 />
+                <input type="number" class="block_input" id="delay" name="delay" required min=2 max=16 value=2 step=2 onchange="test_delay_minimum()" />
             </div>
             <div>
                 <label for="tiles">Nr. of Diodes:</label>
-                <input type="number" class="block_input" id="tiles" name="tiles" required step=1 max=8 value=1 min=1 />
+                <input type="number" class="block_input" id="tiles" name="tiles" required step=1 max=8 value=1 min=1 onchange="test_delay_minimum()" />
             </div>
+        </div>
+
+        <div id="delay_warning_splash" name="delay_warning_splash">
+            Warning: The minimum delay possible is 2 ticks per Diode
         </div>
 
         <!--Uncertainties-->
@@ -39,7 +46,11 @@
         </div>
 
         <div class="collapsible-content" id="uncertainty-section">
-            Enable Comparator as First Element:
+            <div class="tooltip">
+                <img height="20px" style="cursor: pointer;vertical-align:bottom" src="./img/info.svg" />
+                <span class="tooltiptext">Due to scheduling order, a observer schedules itself to turn off before a comparator checks for signal.</span>
+            </div>
+            Enable comparator as first element:
             <label style="float:right" class="switch">
                 <input type="checkbox" checked disabled>
                 <span class="slider round"></span>
@@ -47,7 +58,7 @@
             <br /><br /><br />
         </div>
 
-        <button type="submit" onclick="getSortedTileset()">Generate Tilesets</button>
+        <button type="submit" style="z-index: 1000;" onclick="getSortedTileset()">Generate Tilesets</button>
 
         <p style=" position: absolute; bottom: 0; left: 10; width: 100%; text-align: left;">
             <a href="" style="color:gray">GitHub</a>

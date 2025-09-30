@@ -7,22 +7,71 @@ body {
     height: 100vh;
 }
 
-body.collapsed {
-    grid-template-columns: 0 1fr;
-}
-
 .left {
     position: relative;
-    /* so the button can be placed top-right */
     overflow: hidden;
+    overflow-y: auto;
     background: #f9f9f9;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    transition: padding 0.3s ease;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    /* stays above content when sliding */
 }
 
 body.collapsed .left {
-    padding: 0;
+    transform: translateX(-100%);
+}
+
+.right {
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+body.collapsed .right {
+    margin-left: -350px;
+    /* shift content back into place */
+}
+
+#delay_warning_splash {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s;
+    padding: 0 10px;
+    /* start with no vertical padding */
+}
+
+#delay_warning_splash.show {
+    max-height: 200px;
+    padding: 10px;
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    /* Add dots under the hoverable text */
+    cursor: pointer;
+}
+
+/* Tooltip text */
+.tooltiptext {
+    visibility: hidden;
+    /* Hidden by default */
+    width: 500px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1010;
+    /* Ensure tooltip is displayed above content */
+}
+
+/* Show the tooltip text on hover */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 
