@@ -27,19 +27,26 @@ document.getElementById('toggle-uncertainties').addEventListener('click', functi
 
 function getSortedTileset() {
 
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 810) {
         document.body.classList.toggle("collapsed");
     }
 
     const delay = parseInt(document.getElementById("delay").value);
     const tiles = parseInt(document.getElementById("tiles").value);
 
+    let container = document.getElementById("tileset_container")
     sets = generate_set(delay, tiles)
+
+    if (sets.length > 1000) {
+
+        container.innerHTML = "More than 1000 tilesets found, aborting."
+        return;
+    }
+
     loop = new LoopHandler(sets)
     loop.sort()
 
     //Display
-    let container = document.getElementById("tileset_container")
     container.innerHTML = ""
 
     if (loop.sorted.length == 0) {
@@ -62,6 +69,7 @@ function get_tileset_html(i, el) {
 
 function test_delay_minimum() {
 
+    document.getElementById("channel_nr_warning_splash").classList.remove("show");
     const delay = parseInt(document.getElementById("delay").value);
     const tiles = parseInt(document.getElementById("tiles").value);
 
@@ -73,4 +81,27 @@ function test_delay_minimum() {
         splash_text.classList.remove("show");
     }
 
+}
+
+
+function set_optimal_diode_nr() {
+    const delay = parseInt(document.getElementById("delay").value);
+
+    const optimal_delay = find_optimal_diodes(delay);
+    document.getElementById("tiles").value = optimal_delay.diode_nr;
+
+    document.getElementById("channel_nr_warning_splash_nr").innerHTML = optimal_delay.channels
+    document.getElementById("delay_warning_splash").classList.remove("show");
+    document.getElementById("channel_nr_warning_splash").classList.add("show");
+}
+
+function set_optimal_delay() {
+    const tiles = parseInt(document.getElementById("tiles").value);
+
+    const optimal_delay = find_optimal_delay(tiles);
+    document.getElementById("delay").value = optimal_delay.delay;
+
+    document.getElementById("channel_nr_warning_splash_nr").innerHTML = optimal_delay.channels
+    document.getElementById("delay_warning_splash").classList.remove("show");
+    document.getElementById("channel_nr_warning_splash").classList.add("show");
 }

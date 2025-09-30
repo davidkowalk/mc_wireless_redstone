@@ -18,6 +18,9 @@ function run_unit_tests() {
     run_test(test_channel_number);
     run_test(test_warnings);
 
+    run_test(test_delay_optimizer);
+    run_test(test_diode_optimizer);
+
     //AI generated Tests
     run_test(test_schedule_next);
     run_test(test_add_tilesets);
@@ -34,6 +37,14 @@ function run_unit_tests() {
         total: total_tests,
         passed: passed_tests
     };
+}
+
+function test_delay_optimizer() {
+    return (find_optimal_delay(3).delay == 12 && find_optimal_delay(4).delay == 18 && find_optimal_delay(1).delay == 2);
+}
+
+function test_diode_optimizer() {
+    return (find_optimal_diodes(10).diode_nr == 4 && find_optimal_diodes(12).diode_nr == 5)
 }
 
 function test_generation() {

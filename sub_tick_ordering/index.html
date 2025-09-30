@@ -40,6 +40,10 @@
             Warning: The minimum delay possible is 2 ticks per Diode
         </div>
 
+        <div id="channel_nr_warning_splash" name="channel_nr_warning_splash">
+            Optimized channels: <span id="channel_nr_warning_splash_nr"></span>
+        </div>
+
         <!--Uncertainties-->
 
         <div class="collapsible-label" id="toggle-uncertainties">
@@ -62,10 +66,10 @@
         <button type="submit" style="z-index: 1000;" onclick="getSortedTileset()">Generate Tilesets</button>
         <div class="form-row" style="padding-top: 10px;">
             <div>
-                <button type="submit" style="z-index: 1000;" onclick="getSortedTileset()">Optimize Delay</button>
+                <button type="submit" style="z-index: 1000;" onclick="set_optimal_delay()">Optimize Delay</button>
             </div>
             <div>
-                <button type="submit" style="z-index: 1000;" onclick="getSortedTileset()">Optimize Diode Nr.</button>
+                <button type="submit" style="z-index: 1000;" onclick="set_optimal_diode_nr()">Optimize Diode Nr.</button>
             </div>
         </div>
 

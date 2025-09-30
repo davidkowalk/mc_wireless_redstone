@@ -29,9 +29,11 @@ body.collapsed .left {
 }
 
 body.collapsed .right {
-    margin-left: -350px;
+    margin-left: -30%;
     /* shift content back into place */
 }
+
+/*Splash Text*/
 
 #delay_warning_splash {
     max-height: 0;
@@ -42,6 +44,19 @@ body.collapsed .right {
 }
 
 #delay_warning_splash.show {
+    max-height: 200px;
+    padding: 10px;
+}
+
+#channel_nr_warning_splash {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s;
+    padding: 0 10px;
+    /* start with no vertical padding */
+}
+
+#channel_nr_warning_splash.show {
     max-height: 200px;
     padding: 10px;
 }

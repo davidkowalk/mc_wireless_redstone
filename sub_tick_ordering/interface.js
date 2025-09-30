@@ -73,6 +73,72 @@ function get_available_channels(tile_length) {
 
 }
 
+
+function find_optimal_delay(diode_nr) {
+
+    if (diode_nr == 1) {
+        return {
+            delay: 2,
+            channels: 2
+        };
+    }
+
+    delay = 2 * diode_nr;
+    optimal_delay = delay;
+    max_channels = 0;
+    channels = 1;
+
+    while (channels > max_channels) {
+        max_channels = channels
+        optimal_delay = delay
+
+        delay += 2;
+        channels = generate_set(delay, diode_nr).length;
+    }
+
+    return {
+        delay: optimal_delay,
+        channels: max_channels
+    };
+}
+
+
+function find_optimal_diodes(delay) {
+
+    if (delay == 2) {
+        return {
+            diode_nr: 1,
+            channels: 2
+        };
+    } else if (delay == 4) {
+        return {
+            diode_nr: 2,
+            channels: 4
+        };
+    }
+
+    //Optimal nuber of diodes for a given delay
+
+    diode_nr = Math.ceil(delay / 8) + 1;
+    optimal_diode_nr = diode_nr;
+    max_channels = 0;
+    channels = 1;
+
+    while (channels > max_channels) {
+        max_channels = channels
+        optimal_diode_nr = diode_nr
+
+        diode_nr += 1;
+        channels = generate_set(delay, diode_nr).length;
+    }
+
+    return {
+        diode_nr: diode_nr - 1,
+        channels: max_channels
+    };
+
+}
+
 //For debugging
 function simulate() {
     //set = generate_set(8, 3);
@@ -81,9 +147,4 @@ function simulate() {
     loop.sort()
 
     console.log(loop.sorted)
-}
-
-function sort_tilesets(tile_sets) {
-    //takes a list of tile sets and simulates the activation
-    return;
 }
