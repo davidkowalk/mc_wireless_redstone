@@ -26,6 +26,11 @@ document.getElementById('toggle-uncertainties').addEventListener('click', functi
 });
 
 function getSortedTileset() {
+
+    if (window.innerWidth <= 768) {
+        document.body.classList.toggle("collapsed");
+    }
+
     const delay = parseInt(document.getElementById("delay").value);
     const tiles = parseInt(document.getElementById("tiles").value);
 

@@ -1,0 +1,40 @@
+@media (max-width: 768px) {
+
+    body {
+        display: block;
+        /* no grid on mobile */
+    }
+
+    .left {
+        position: fixed;
+        /* cover screen */
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 90%;
+        /* full width */
+        overflow-y: auto;
+        background: #f9f9f9;
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+
+    .right {
+        margin-left: 10px;
+        padding: 10px;
+    }
+
+    body.collapsed .left {
+        transform: translateX(-100%);
+    }
+
+    body.collapsed .right {
+        margin-left: 0px;
+    }
+
+    .show-sidebar-btn {
+        background: #eeeeee;
+        border: 1px;
+    }
+}
