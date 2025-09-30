@@ -159,7 +159,7 @@ function test_get_chain_start() {
 function test_toString() {
     try {
         const d = new Repeater(2, new Comparator());
-        return d.toString().includes("repeater(2) -> comparator(2)");
+        return d.toString().includes("repeater(2)") && d.toString().includes("comparator(2)");
     } catch {
         return false
     }

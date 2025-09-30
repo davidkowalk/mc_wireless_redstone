@@ -206,7 +206,7 @@ class Diode {
 
     toString() {
         if (this.child) {
-            return this.type + "(" + this.delay + ") -> " + this.child.toString();
+            return this.type + "(" + this.delay + ") ↦ " + this.child.toString();
         } else {
             return this.type + "(" + this.delay + ")";
         }
