@@ -189,6 +189,9 @@ input:checked+.slider {
 input:disabled + .slider {
   background-color: rgb(211, 211, 211);
 }
+input:disabled + .slider:before {
+  background-color: rgb(163, 163, 163);
+}
 
 input:focus+.slider {
     box-shadow: 0 0 1px #2196F3;
@@ -276,4 +279,18 @@ button:hover {
 .collapsible-content.open {
     max-height: 300px;
     /* Adjust if more space is needed */
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid gray ;/* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1.5s ease infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

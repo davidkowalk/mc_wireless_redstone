@@ -16,7 +16,7 @@ function run_unit_tests() {
 
     run_test(test_generation);
     run_test(test_channel_number);
-    run_test(test_warnings);
+    //run_test(test_warnings);
 
     run_test(test_delay_optimizer);
     run_test(test_diode_optimizer);

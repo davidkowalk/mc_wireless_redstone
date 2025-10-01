@@ -31,40 +31,97 @@ function getSortedTileset() {
         document.body.classList.toggle("collapsed");
     }
 
-    const delay = parseInt(document.getElementById("delay").value);
-    const tiles = parseInt(document.getElementById("tiles").value);
+    worker_enabled = document.getElementById("web_worker_toggle_button").checked;
 
     let container = document.getElementById("tileset_container")
-    sets = generate_set(delay, tiles)
 
-    if (sets.length > 1000) {
+    if (worker_enabled) {
 
-        container.innerHTML = "More than 1000 tilesets found, aborting."
-        return;
-    }
 
-    loop = new LoopHandler(sets)
-    loop.sort()
+        const delay = parseInt(document.getElementById("delay").value);
+        const tiles = parseInt(document.getElementById("tiles").value);
+        
+        container.innerHTML = `
+            <div style="margin-left:auto; margin-right:auto" class="loader"></div>
+            <br/><br/>
+            <button onclick="terminate_web_workers()">Stop</button>
+            <br/><br/>
+            <div id = "result_counter"></div>
+        `;
 
-    //Display
-    container.innerHTML = ""
+        // Terminate if a worker is already running
+        if (typeof web_workers !== "undefined") {
+            web_workers.terminate();
+        }
 
-    if (loop.sorted.length == 0) {
-        container.innerHTML = "No Tilesets Found"
+        web_workers = new Worker("worker.js");
+
+        // Handle messages from worker
+        web_workers.onmessage = function(event) {
+            if (event.data.type === "count") {
+                // Before sorting: show number of sets
+                document.getElementById("result_counter").innerHTML =
+                    `Generated ${event.data.value} sets...`;
+            } else if (event.data.type === "result") {
+                // After sorting: display results
+                container.innerHTML = "";
+                console.log(event.data.value);
+                if (event.data.value.length === 0) {
+                    container.innerHTML = "No Tilesets Found";
+                } else {
+                    container.innerHTML = event.data.value;
+                }
+            } else if (event.data.type === "error") {
+                container.innerHTML = event.data.value;
+            }
+        };
+
+        // Send input params to worker
+        web_workers.postMessage({ delay, tiles });
+
+
     } else {
 
-        let i = 1;
-        for (let el of loop.sorted) {
-            //console.log(el.toString())
-
-            container.innerHTML += get_tileset_html(i, el);
-            i++;
+        
+        const delay = parseInt(document.getElementById("delay").value);
+        const tiles = parseInt(document.getElementById("tiles").value);
+        
+        sets = generate_set(delay, tiles)
+        
+        if (sets.length > 1000) {
+            
+            container.innerHTML = "More than 1000 tilesets found, aborting."
+            return;
+        }
+        
+        loop = new LoopHandler(sets)
+        loop.sort()
+        
+        //Display
+        container.innerHTML = ""
+        
+        if (loop.sorted.length == 0) {
+            container.innerHTML = "No Tilesets Found"
+        } else {
+            
+            let i = 1;
+            for (let el of loop.sorted) {
+                //console.log(el.toString())
+                
+                container.innerHTML += get_tileset_html(i, el);
+                i++;
+            }
         }
     }
 }
 
-function get_tileset_html(i, el) {
-    return "<label><input type='checkbox'>#" + i + " " + el.render() + "</label>\n<hr/>"
+function terminate_web_workers() {
+
+    let container = document.getElementById("tileset_container")
+
+    web_workers.terminate()
+    container.innerHTML = "";
+
 }
 
 function test_delay_minimum() {

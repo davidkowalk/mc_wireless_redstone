@@ -211,6 +211,14 @@ class Diode {
             return this.type + "(" + this.delay + ")";
         }
     }
+
+    render() {
+        if (this.child) {
+            return this.type + "(" + this.delay + ") ↦ " + this.child.render();
+        } else {
+            return this.type + "(" + this.delay + ")"
+        }
+    }
 }
 
 class Repeater extends Diode {
@@ -238,4 +246,9 @@ class Comparator extends Diode {
             this.priority = 0;
         }
     }
+}
+
+
+function get_tileset_html(i, el) {
+    return "<label><input type='checkbox'>#" + i + " " + el.render() + "</label>\n<hr/>"
 }
