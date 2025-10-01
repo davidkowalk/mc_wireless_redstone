@@ -64,7 +64,7 @@ function getSortedTileset() {
 }
 
 function get_tileset_html(i, el) {
-    return "<label><input type='checkbox'>#" + i + " " + el.toString() + "</label>\n<hr/>"
+    return "<label><input type='checkbox'>#" + i + " " + el.render() + "</label>\n<hr/>"
 }
 
 function test_delay_minimum() {
@@ -104,4 +104,15 @@ function set_optimal_delay() {
     document.getElementById("channel_nr_warning_splash_nr").innerHTML = optimal_delay.channels
     document.getElementById("delay_warning_splash").classList.remove("show");
     document.getElementById("channel_nr_warning_splash").classList.add("show");
+}
+
+
+function check_web_worker() {
+    const button = document.getElementById("web_worker_toggle_button");
+    if(typeof(Worker) !== "undefined") {
+      button.checked = true;
+    } else {
+      button.checked = false
+      button.disabled = true;
+    }
 }
