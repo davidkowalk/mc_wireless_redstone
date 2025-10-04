@@ -54,7 +54,7 @@ function getSortedTileset() {
             web_workers.terminate();
         }
 
-        web_workers = new Worker("worker.js");
+        web_workers = new Worker("js/worker.js");
 
         // Handle messages from worker
         web_workers.onmessage = function(event) {
